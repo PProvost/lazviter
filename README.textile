@@ -1,6 +1,6 @@
 h2. About La-Z-Viter
 
-La-Z-Viter was born out of necessity. My guild is a large one and we do signups and approvals via a web-based calendar and our forums. Our raid leaders and officers needed a way to quickly past from the approval forum post into something in game and get people invited to the raid.
+La-Z-Viter was born out of necessity. My guild is a large one and we do signups and approvals via a web-based calendar and our forums. Our raid leaders and officers needed a way to quickly paste from the approval forum post into something in game and get people invited to the raid.
 
 Using La-Z-Viter is simple. Simply copy/paste the list of members into the box and press invite. La-Z-Viter will try to do the right thing. Here are some of the rules it uses to do invites:
 
