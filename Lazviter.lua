@@ -64,6 +64,44 @@ function Lazviter:PLAYER_LOGOUT()
 	-- Do anything you need to do as the player logs out
 end
 
+local function invite(name)
+end
+
+function Lazviter:DoInvites(approved, standby)
+	self.approved = approved
+	self.standby = standby
+	self:ProcessApprovedList()
+end
+
+function Lazviter:ProcessApprovedList()
+	local approved = self.approved
+
+	local inRaid = (GetNumRaidMembers() > 0)
+	for i = 1,#approved do
+		if not inRaid and i == 4 then
+			self:RegisterEvent("CHAT_MSG_SYSTEM")
+			break
+		else
+			local name = table.remove(approved)
+			if not (UnitInRaid(name) or UnitInParty(name)) then
+				InviteUnit(name)
+			end
+		end
+	end
+end
+
+function Lazviter:CHAT_MSG_SYSTEM(event, msg)
+	local t1 = string.match(msg, "(%w+) joins the party.")
+	local t3 = string.match(msg, "You have joined a raid group.")
+
+	if t1 then
+		ConvertToRaid()
+	elseif t3 then
+		self:UnregisterEvent("CHAT_MSG_SYSTEM")
+		self:ProcessApprovedList()
+	end
+end
+
 SLASH_LAZVITER1 = "/lazviter"
 SLASH_LAZVITER2 = "/lin"
 SlashCmdList.LAZVITER = function(msg)

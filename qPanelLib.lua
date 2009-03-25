@@ -26,7 +26,7 @@ if not lib then return end -- no upgrade needed
 local function createChildPanel(mainPanel, type, name, inheritFrame)
 	local frame = CreateFrame(type or "Frame", name, mainPanel, inheritFrame)
 	frame:SetPoint("TOPLEFT", 21, -73)
-	frame:SetPoint("BOTTOMRIGHT", -10, 38)
+	frame:SetPoint("BOTTOMRIGHT", -10, 90)
 	table.insert(mainPanel.subPanels, frame)
 	return frame
 end
@@ -96,8 +96,10 @@ function lib:CreateMainPanel(name, title, isDoubleWide)
 		createTexture(frame, "ARTWORK", 320, 256, "Interface\\AuctionFrame\\UI-AuctionFrame-Bid-Bot", "TOPLEFT", 256, -256)
 		createTexture(frame, "ARTWORK", 256, 256, "Interface\\AuctionFrame\\UI-AuctionFrame-Bid-BotRight", "TOPLEFT", frame.bottom, "TOPRIGHT")
 	else
+		--[[
 		local bottom = createTexture(frame, "ARTWORK", 192, 256, "Interface\\MerchantFrame\\UI-Merchant-BotLeft", "BOTTOMRIGHT", -47, 0)
 		bottom:SetTexCoord(0.25, 1, 0, 1)
+		]]
 		createTexture(frame, "ARTWORK", 256, 256, "Interface\\MerchantFrame\\UI-Merchant-TopLeft", "TOPLEFT", 0, 0)
 		createTexture(frame, "ARTWORK", 256, 256, "Interface\\MerchantFrame\\UI-Merchant-BotLeft", "BOTTOMLEFT", 0, 0)
 		createTexture(frame, "ARTWORK", 128, 256, "Interface\\MerchantFrame\\UI-Merchant-TopRight", "TOPRIGHT", 0, 0)
