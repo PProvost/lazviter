@@ -5,7 +5,7 @@ La-Z-Viter was born out of necessity. My guild is a large one and we do signups 
 Using La-Z-Viter is simple. Simply copy/paste the list of members into the box and press invite. La-Z-Viter will try to do the right thing. Here are some of the rules it uses to do invites:
 
 # The first word on each line is used as the name of the invitee
-# Names that don't match guild members are ignored
+# Names that aren't in your guild roster or friends list are ignored
 # If the name is "Waitlist" or "Standby" then all subsequent names are not included but will be reported in the printed summary
 # Blank lines are ignored
 
