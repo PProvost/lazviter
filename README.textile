@@ -1,16 +1,25 @@
 h2. About La-Z-Viter
 
-La-Z-Viter was born out of necessity. My guild is a large one and we do signups and approvals via a web-based calendar and our forums. Our raid leaders and officers needed a way to quickly paste from the approval forum post into something in game and get people invited to the raid.
+La-Z-Viter was born out of necessity. My guild is a large one and we do signups 
+and approvals via a web-based calendar and our forums. Our raid leaders and officers 
+needed a way to quickly paste from the approval forum post into something in game 
+and get people invited to the raid.
 
-Using La-Z-Viter is simple. Simply copy/paste the list of members into the box and press invite. La-Z-Viter will try to do the right thing. Here are some of the rules it uses to do invites:
+Using La-Z-Viter is simple. Simply copy/paste the list of members into the box and 
+press invite. La-Z-Viter will try to do the right thing. Here are some of the rules 
+it uses to do invites:
 
 # The first word on each line is used as the name of the invitee
 # Names that aren't in your guild roster or friends list are ignored
 # If the name is "Waitlist" or "Standby" then all subsequent names are not included but will be reported in the printed summary
+# If the person isn't online, their name is output to the default chat frame
 # Blank lines are ignored
 
 h2. Slash Commands
 
 /lazviter or /lin - Opens the invitation window
 
+h2. Credits
 
+Thanks to Ennoia of Dragonblight for the silly name and to all my other late night 
+guildies for helping me test it.
