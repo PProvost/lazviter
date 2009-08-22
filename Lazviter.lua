@@ -52,18 +52,12 @@ end
 
 function Lazviter:DoActualInvites()
 	if not UnitInRaid("player") then
-		local pNum = GetNumPartyMembers()
-		if pNum == 0 then
-			-- This means we have to first invite up to the party size (4), and
-			-- then wait for someone to join before we convert to a party and
-			-- invite the rest.
+		if GetNumPartyMembers() == 0 then
 			self:RegisterEvent("PARTY_MEMBERS_CHANGED")
 			for i = 1, 4 do
 				local u = table.remove(self.approved)
-				if u then InviteUnit(u) end
+				if u then self:InviteUnit(u) end
 			end
-			-- We've invited as many people as we can, now we need to wait
-			-- for a raid group.
 			return
 		else
 			ConvertToRaid()
@@ -71,14 +65,13 @@ function Lazviter:DoActualInvites()
 			return
 		end
 	end
-	-- Either we're in a raid, or we only want to invite enough people that
-	-- we can fit in our group anyway.
-	for i, v in ipairs(self.approved) do
-		InviteUnit(v)
-	end
-	for k in pairs(self.approved) do
-		self.approved[k] = nil
-	end
+	for i, v in ipairs(self.approved) do self:InviteUnit(v) end
+	for k in pairs(self.approved) do self.approved[k] = nil end
+end
+
+function Lazviter:InviteUnit(unit)
+	Print("Inviting "..unit)
+	InviteUnit(unit)
 end
 
 SLASH_LAZVITER1 = "/lazviter"
