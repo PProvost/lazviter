@@ -27,6 +27,7 @@ local function Debug(...) if debugf then debugf:AddMessage(string.join(", ", tos
 Lazviter = CreateFrame("frame")
 Lazviter:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
 Lazviter:RegisterEvent("ADDON_LOADED")
+LibStub("AceTimer-3.0"):Embed(Lazviter)
 
 function Lazviter:ADDON_LOADED(event, addon)
 	if addon:lower() ~= addonName:lower() then return end
@@ -39,38 +40,45 @@ function Lazviter:DoInvites(approved, standby)
 	self.approved = approved
 	self.standby = standby
 	self:ProcessApprovedList()
+	self:ScheduleTimer("DoActualInvites", 5)
 end
 
-function Lazviter:ProcessApprovedList()
-	local approved = self.approved
-
-	local inRaid = (GetNumRaidMembers() > 0)
-	for i = 1,#approved do
-		if not inRaid and i == 4 then
-			self:RegisterEvent("CHAT_MSG_SYSTEM")
-			break
-		else
-			local name = table.remove(approved)
-			if not UnitExists(name) then
-				Print("Unit does not exist: " .. name)
-			elseif not (UnitInRaid(name) or UnitInParty(name)) then
-				InviteUnit(name)
-			else
-				Print("Unable to invite " .. name)
-			end
-		end
+function Lazviter:PARTY_MEMBERS_CHANGED()
+	if GetNumPartyMembers() > 0 then
+		ConvertToRaid()
+		self:UnregisterEvent("PARTY_MEMBERS_CHANGED")
+		self:ScheduleTimer("DoActualInvites", 2)
 	end
 end
 
-function Lazviter:CHAT_MSG_SYSTEM(event, msg)
-	local t1 = string.match(msg, "(%w+) joins the party.")
-	local t3 = string.match(msg, "You have joined a raid group.")
-
-	if t1 then
-		ConvertToRaid()
-	elseif t3 then
-		self:UnregisterEvent("CHAT_MSG_SYSTEM")
-		self:ProcessApprovedList()
+function Lazviter:DoActualInvites()
+	if not UnitInRaid("player") then
+		local pNum = GetNumPartyMembers()
+		if pNum == 0 then
+			-- This means we have to first invite up to the party size (4), and
+			-- then wait for someone to join before we convert to a party and
+			-- invite the rest.
+			self:RegisterEvent("PARTY_MEMBERS_CHANGED")
+			for i = 1, 4 do
+				local u = table.remove(self.approved)
+				if u then InviteUnit(u) end
+			end
+			-- We've invited as many people as we can, now we need to wait
+			-- for a raid group.
+			return
+		else
+			ConvertToRaid()
+			self:ScheduleTimer("DoActualInvites", 2)
+			return
+		end
+	end
+	-- Either we're in a raid, or we only want to invite enough people that
+	-- we can fit in our group anyway.
+	for i, v in ipairs(self.approved) do
+		InviteUnit(v)
+	end
+	for k in pairs(self.approved) do
+		self.approved[k] = nil
 	end
 end
 
