@@ -39,8 +39,7 @@ end
 function Lazviter:DoInvites(approved, standby)
 	self.approved = approved
 	self.standby = standby
-	self:ProcessApprovedList()
-	self:ScheduleTimer("DoActualInvites", 5)
+	self:ScheduleTimer("DoActualInvites", 2)
 end
 
 function Lazviter:PARTY_MEMBERS_CHANGED()
