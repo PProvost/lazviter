@@ -30,15 +30,15 @@ editbox:SetPoint("TOP")
 editbox:SetPoint("LEFT")
 editbox:SetPoint("RIGHT")
 editbox:SetHeight(1000)
-editbox:SetFontObject(GameFontHighlightSmall)
+editbox:SetFontObject(GameFontHighlight)
 editbox:SetTextInsets(2,2,2,2)
 editbox:SetMultiLine(true)
 editbox:SetAutoFocus(false)
 editbox:SetScript("OnEscapePressed", editbox.ClearFocus)
-editbox:SetScript("OnEditFocusLost", function(self) tekPadDB = self:GetText() end)
+editbox:SetScript("OnEditFocusLost", function(self) Lazviter.editBoxText = self:GetText() end)
  
 editbox:SetScript("OnShow", function(self)
-	local text = tekPadDB or ""
+	local text = Lazviter.editBoxText or ""
 	self:SetText(text)
 	self:SetFocus()
 end)
@@ -65,7 +65,7 @@ scroll:EnableMouseWheel(true)
 scroll:SetScript("OnMouseWheel", function(self, val) doscroll(offset + val*LINEHEIGHT*3) end)
  
 local Invite_OnClick
-local butt = LibStub("tekKonfig-Button").new(panel, "BOTTOMRIGHT", -40, 65)
+local butt = LibStub("tekKonfig-Button").new(panel, "TOPRIGHT", -45, -43)
 butt:SetText("Invite")
 butt:SetScript("OnClick", Invite_OnClick)
 
