@@ -3,20 +3,19 @@
 ## Title: La-Z-Viter
 ## Notes: Smart copy-paste raid and event inviter addon
 ## Author: Quaiche
-## Version: 1.0
+## Version: $project-version$
 ## X-Category: Raid
-
 ## SavedVariables: LazviterDB
-
 ## OptionalDeps: tekDebug, tekErr
 
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
-## X-LoadOn-Slash: /lazviter
 
-LibStub.lua
-tekKonfigAboutPanel.lua
-qPanelLib.lua
+libs/LibStub.lua                                                                                                  
+libs/AceTimer-3.0.lua                                                                                             
+libs/tekKonfigAboutPanel.lua                                                                                      
+libs/tekKonfigButton.lua                                                                                          
+libs/tekPanel.lua                                                                                                 
 
 Lazviter.lua
 Lazviter-UI.lua
