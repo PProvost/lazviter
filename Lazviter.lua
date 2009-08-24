@@ -36,9 +36,12 @@ function Lazviter:ADDON_LOADED(event, addon)
 	self.ADDON_LOADED = nil
 end
 
-function Lazviter:DoInvites(approved, standby)
+function Lazviter:DoInvites(approved, standby, unknown)
 	self.approved = approved
 	self.standby = standby
+	self.unknown = unknown
+
+	Print("Beginning invites")
 	self:ScheduleTimer("DoActualInvites", 2)
 end
 
@@ -67,6 +70,9 @@ function Lazviter:DoActualInvites()
 	end
 	for i, v in ipairs(self.approved) do self:InviteUnit(v) end
 	for k in pairs(self.approved) do self.approved[k] = nil end
+
+	for i,v in ipairs(self.standby) do Print(v.." on standby") end
+	for i,v in ipairs(self.unknown) do Print(v.." not found") end
 end
 
 function Lazviter:InviteUnit(unit)

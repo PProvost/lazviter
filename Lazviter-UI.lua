@@ -64,11 +64,6 @@ scroll:UpdateScrollChildRect()
 scroll:EnableMouseWheel(true)
 scroll:SetScript("OnMouseWheel", function(self, val) doscroll(offset + val*LINEHEIGHT*3) end)
  
-local Invite_OnClick
-local butt = LibStub("tekKonfig-Button").new(panel, "TOPRIGHT", -45, -43)
-butt:SetText("Invite")
-butt:SetScript("OnClick", Invite_OnClick)
-
 local function isFriend(name)
 	for i = 1, GetNumFriends() do
 		if GetFriendInfo(i) == name then return true end
@@ -86,6 +81,7 @@ local function Invite_OnClick()
 
 	local approved = {}
 	local standby = {}
+	local unknown = {}
 	local currentList = approved
 	local attlist = { string.split("\n", text) }
 	for i,v in ipairs(attlist) do
@@ -95,12 +91,19 @@ local function Invite_OnClick()
 				currentList = standby
 			elseif isFriend(name) or isGuildMember(name) then
 				table.insert(currentList, name)
+			else
+				table.insert(unknown, name)
 			end
 		end
 	end
 
-	Lazviter:DoInvites(approved, standby)
+	Lazviter:DoInvites(approved, standby, unknown)
 end
+
+local butt = LibStub("tekKonfig-Button").new(panel, "TOPRIGHT", -45, -43)
+butt:SetText("Invite")
+butt:SetScript("OnClick", Invite_OnClick)
+
 
 function Lazviter:ShowInputFrame()
 	ShowUIPanel(panel)
