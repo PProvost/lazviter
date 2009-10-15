@@ -17,53 +17,13 @@ limitations under the License.
 if not Lazviter then return end
 
 local LINEHEIGHT, maxoffset, offset = 12, 0, 0
-local panel = LibStub("tekPanel").new("Lazviter-Panel", "La-Z-Viter")
+local panel = LibStub("tekPanel").new("LazviterPanel", "La-Z-Viter")
+panel:SetAttribute("UIPanelLayout-pushable", 5)
  
-local scroll = CreateFrame("ScrollFrame", nil, panel)
-scroll:SetPoint("TOPLEFT", 21, -73)
-scroll:SetPoint("BOTTOMRIGHT", -10, 38)
-local HEIGHT = scroll:GetHeight()
- 
-local editbox = CreateFrame("EditBox", nil, scroll)
-scroll:SetScrollChild(editbox)
-editbox:SetPoint("TOP")
-editbox:SetPoint("LEFT")
-editbox:SetPoint("RIGHT")
-editbox:SetHeight(1000)
-editbox:SetFontObject(GameFontHighlight)
-editbox:SetTextInsets(2,2,2,2)
-editbox:SetMultiLine(true)
-editbox:SetAutoFocus(false)
-editbox:SetScript("OnEscapePressed", editbox.ClearFocus)
-editbox:SetScript("OnEditFocusLost", function(self) Lazviter.editBoxText = self:GetText() end)
- 
-editbox:SetScript("OnShow", function(self)
-	local text = Lazviter.editBoxText or ""
-	self:SetText(text)
-	self:SetFocus()
-end)
- 
-local function doscroll(v)
-	offset = math.max(math.min(v, 0), maxoffset)
-	scroll:SetVerticalScroll(-offset)
-	editbox:SetPoint("TOP", 0, offset)
-end
- 
-editbox:SetScript("OnCursorChanged", function(self, x, y, width, height)
-	LINEHEIGHT = height
-	if offset < y then
-		doscroll(y)
-	elseif math.floor(offset - HEIGHT + height*2) > y then
-		local v = y + HEIGHT - height*2
-		maxoffset = math.min(maxoffset, v)
-		doscroll(v)
-	end
-end)
- 
-scroll:UpdateScrollChildRect()
-scroll:EnableMouseWheel(true)
-scroll:SetScript("OnMouseWheel", function(self, val) doscroll(offset + val*LINEHEIGHT*3) end)
- 
+local scrollEdit = LibStub("QScrollingEditBox"):New("LazviterPanelEditBox", panel)
+scrollEdit:SetPoint("TOPLEFT", 22, -76)
+scrollEdit:SetPoint("BOTTOMRIGHT", -65, 81)
+
 local function isFriend(name)
 	for i = 1, GetNumFriends() do
 		if GetFriendInfo(i) == name then return true end
@@ -77,7 +37,7 @@ local function isGuildMember(name)
 end
 
 local function Invite_OnClick()
-	local text = editbox:GetText()
+	local text = scrollEdit:GetText()
 
 	local approved = {}
 	local standby = {}

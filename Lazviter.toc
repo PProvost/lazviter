@@ -11,11 +11,12 @@
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
 
-libs/LibStub.lua                                                                                                  
-libs/AceTimer-3.0.lua                                                                                             
-libs/tekKonfigAboutPanel.lua                                                                                      
-libs/tekKonfigButton.lua                                                                                          
-libs/tekPanel.lua                                                                                                 
+libs\LibStub.lua                                                                                                  
+libs\AceTimer-3.0.lua                                                                                             
+libs\tekKonfigAboutPanel.lua                                                                                      
+libs\tekKonfigButton.lua                                                                                          
+libs\tekPanel.lua                                                                                                 
+libs\QScrollingEditBox.lua
 
 Lazviter.lua
 Lazviter-UI.lua
