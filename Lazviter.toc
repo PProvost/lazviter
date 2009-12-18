@@ -1,4 +1,4 @@
-## Interface: 30200
+## Interface: 30300
 
 ## Title: La-Z-Viter
 ## Notes: Smart copy-paste raid and event inviter addon

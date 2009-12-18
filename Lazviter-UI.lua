@@ -22,7 +22,34 @@ panel:SetAttribute("UIPanelLayout-pushable", 5)
  
 local scrollEdit = LibStub("QScrollingEditBox"):New("LazviterPanelEditBox", panel)
 scrollEdit:SetPoint("TOPLEFT", 22, -76)
-scrollEdit:SetPoint("BOTTOMRIGHT", -65, 81)
+scrollEdit:SetPoint("BOTTOMRIGHT", -65, 150)
+
+local outputMessageFrame = CreateFrame("ScrollingMessageFrame", "LazviterOutputMessageFrame", panel)
+outputMessageFrame:SetPoint("TOPLEFT", scrollEdit, "BOTTOMLEFT", 0, -3)
+outputMessageFrame:SetPoint("BOTTOMRIGHT", -60, 82)
+outputMessageFrame:SetMaxLines(250)
+outputMessageFrame:SetFontObject(ChatFontSmall)
+outputMessageFrame:SetJustifyH("LEFT")
+outputMessageFrame:SetFading(false)
+outputMessageFrame:SetInsertMode("BOTTOM")
+local outputMessageFrameScrollbar = CreateFrame("Slider", nil, outputMessageFrame, "UIPanelScrollBarTemplate")
+outputMessageFrameScrollbar:SetPoint("TOPLEFT", outputMessageFrame, "TOPRIGHT", 0, -16)
+outputMessageFrameScrollbar:SetPoint("BOTTOMLEFT", outputMessageFrame, "BOTTOMRIGHT", 0, 16)
+outputMessageFrameScrollbar:SetMinMaxValues(1,1)
+local tmp = outputMessageFrame.AddMessage
+outputMessageFrame.AddMessage = function(self, text, ...)
+	local min, max = outputMessageFrameScrollbar:GetMinMaxValues()
+	local numMessages = outputMessageFrame:GetNumMessages()
+	if numMessages > max then max = numMessages end
+	outputMessageFrameScrollbar:SetMinMaxValues(min, max)
+	tmp(self, text, ...)
+end
+outputMessageFrameScrollbar:SetScript("OnValueChanged", function(self, value)
+	outputMessageFrame:SetScrollOffset(value)
+end)
+outputMessageFrame:SetScript("OnMessageScrollChanged", function(self)
+	outputMessageFrameScrollbar:SetValue( outputMessageFrame:GetCurrentScroll() )
+end)
 
 local function isFriend(name)
 	for i = 1, GetNumFriends() do
@@ -41,7 +68,6 @@ local function Invite_OnClick()
 
 	local approved = {}
 	local standby = {}
-	local unknown = {}
 	local currentList = approved
 	local attlist = { string.split("\n", text) }
 	for i,v in ipairs(attlist) do
@@ -49,15 +75,13 @@ local function Invite_OnClick()
 			local name = string.match(v, "%w+")
 			if name and string.match(name, "^[Ss]tandby.*") or string.match(name, "^[Ww]aitlist.*") or string.match(name, "^[Ww]ait [Ll]ist.*") then
 				currentList = standby
-			elseif isFriend(name) or isGuildMember(name) then
-				table.insert(currentList, name)
 			else
-				table.insert(unknown, name)
+				table.insert(currentList, name)
 			end
 		end
 	end
 
-	Lazviter:DoInvites(approved, standby, unknown)
+	Lazviter:DoInvites(approved, standby)
 end
 
 local butt = LibStub("tekKonfig-Button").new(panel, "TOPRIGHT", -45, -43)

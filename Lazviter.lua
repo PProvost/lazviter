@@ -34,12 +34,30 @@ function Lazviter:ADDON_LOADED(event, addon)
 	LibStub("tekKonfig-AboutPanel").new(nil, "Lazviter") -- Make first arg nil if no parent config panel
 	self:UnregisterEvent("ADDON_LOADED")
 	self.ADDON_LOADED = nil
+	if IsLoggedIn() then self:PLAYER_LOGIN() else self:RegisterEvent("PLAYER_LOGIN") end
 end
 
-function Lazviter:DoInvites(approved, standby, unknown)
+function Lazviter:PLAYER_LOGIN()
+	GuildRoster()
+	self:UnregisterEvent("PLAYER_LOGIN")
+	self.PLAYER_LOGIN = nil
+end
+
+local function isFriend(name)
+	for i = 1, GetNumFriends() do
+		if GetFriendInfo(i) == name then return true end
+	end
+end
+
+local function isGuildMember(name)
+	for i = 1, GetNumGuildMembers() do
+		if GetGuildRosterInfo(i) == name then return true end
+	end
+end
+
+function Lazviter:DoInvites(approved, standby)
 	self.approved = approved
 	self.standby = standby
-	self.unknown = unknown
 
 	Print("Beginning invites")
 	self:ScheduleTimer("DoActualInvites", 2)
@@ -72,12 +90,31 @@ function Lazviter:DoActualInvites()
 	for k in pairs(self.approved) do self.approved[k] = nil end
 
 	for i,v in ipairs(self.standby) do Print(v.." on standby") end
-	for i,v in ipairs(self.unknown) do Print(v.." not found") end
 end
 
-function Lazviter:InviteUnit(unit)
-	Print("Inviting "..unit)
-	InviteUnit(unit)
+local function isGuildMemberOnline(name)
+   local count = GetNumGuildMembers(true)
+   local nom, online
+   for index = 1,count do
+      nom, _, _, _, _, _, _, _, online = GetGuildRosterInfo(index)
+      if name == nom and online == 1 then
+         return 1
+      end
+   end
+end
+
+function Lazviter:InviteUnit(name)
+	if UnitIsUnit(name, "player") then return end
+	if isGuildMember(name) then
+		if isGuildMemberOnline(name) then
+			InviteUnit(name)
+		else
+			Print("Not online "..name)
+		end
+	else
+		Print("Inviting "..name.." (non guild)")
+		InviteUnit(name)
+	end
 end
 
 SLASH_LAZVITER1 = "/lazviter"
