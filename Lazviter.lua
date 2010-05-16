@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ]]
 
+local myname, ns = ...
 local addonName = "La-Z-Viter"
 
 -- Utility functions
@@ -123,3 +124,7 @@ SlashCmdList.LAZVITER = function(msg)
 	Lazviter:ShowInputFrame()
 end
 
+SLASH_LAZVITERNEW1 = "/lin2"
+SlashCmdList.LAZVITERNEW = function(msg)
+	ns.ShowNewUI()
+end
